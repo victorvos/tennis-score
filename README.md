@@ -71,25 +71,33 @@ graph LR
     classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:black
     classDef data fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:black
     classDef view fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:black
+    classDef actor fill:#fff,stroke:#333,stroke-width:2px,color:black,stroke-dasharray: 5 5
 
-    %% 1. Initialization (Top)
-    App[TennisScoreApp]:::main
-
-    %% 2. Controllers (Left)
-    subgraph Inputs [Controllers & Logic]
+    %% 1. Actors (Input Sources)
+    subgraph Actors [Users]
         direction TB
-        Admin[AdminController]:::control
-        Scoring[ScoringEngine]:::logic
+        Host((Host User)):::actor
+        AdminUser((Admin)):::actor
     end
 
-    %% 3. Model (Center)
+    %% 2. Initialization (Top)
+    App[TennisScoreApp]:::main
+
+    %% 3. Controllers (Left)
+    subgraph Inputs [Controllers & Logic]
+        direction TB
+        Scoring[ScoringEngine]:::logic
+        Admin[AdminController]:::control
+    end
+
+    %% 4. Model (Center)
     subgraph Model [Data Model]
         direction TB
         Config[MatchConfig]:::data
         State[MatchState]:::data
     end
 
-    %% 4. Views (Right)
+    %% 5. Views (Right)
     subgraph Outputs [Views & Network]
         direction TB
         Renderer[UIRenderer]:::view
@@ -100,6 +108,10 @@ graph LR
     App -- Creates --> Inputs
     App -- Creates --> Model
     App -- Creates --> Outputs
+
+    %% User Input Flow
+    Host -- Clicks Score Btns --> Scoring
+    AdminUser -- Uses Panel --> Admin
 
     %% Data Flow (Left to Right)
     Admin -->|Updates| Config
