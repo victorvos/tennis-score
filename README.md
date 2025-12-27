@@ -64,39 +64,57 @@ npm test
 ### Architecture
 
 ```mermaid
-graph TD
-    %% Main Entry Point
-    App[TennisScoreApp] -->|Orchestrates| Config[MatchConfig]
-    App -->|Orchestrates| State[MatchState]
-    
-    %% Dependencies
-    App -->|Injects Data| Scoring[ScoringEngine]
-    App -->|Injects Data| Renderer[UIRenderer]
-    App -->|Injects Logic| Admin[AdminController]
-    App -->|Callbacks| Socket[SocketManager]
+graph LR
+    %% Styling Classes
+    classDef main fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef control fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    classDef data fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef view fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
 
-    %% Interactions
-    Scoring -->|Reads| Config
-    Scoring -->|Updates| State
+    %% 1. Initialization (Top)
+    App[TennisScoreApp]:::main
 
-    Renderer -->|Reads| Config
-    Renderer -->|Reads| State
+    %% 2. Controllers (Left)
+    subgraph Inputs [Controllers & Logic]
+        direction TB
+        Admin[AdminController]:::control
+        Scoring[ScoringEngine]:::logic
+    end
 
+    %% 3. Model (Center)
+    subgraph Model [Data Model]
+        direction TB
+        Config[MatchConfig]:::data
+        State[MatchState]:::data
+    end
+
+    %% 4. Views (Right)
+    subgraph Outputs [Views & Network]
+        direction TB
+        Renderer[UIRenderer]:::view
+        Socket[SocketManager]:::view
+    end
+
+    %% Wiring (Initialization)
+    App -- Creates --> Inputs
+    App -- Creates --> Model
+    App -- Creates --> Outputs
+
+    %% Data Flow (Left to Right)
     Admin -->|Updates| Config
     Admin -->|Updates| State
-    Admin -->|Triggers| Renderer
+    Scoring -->|Updates| State
 
-    Socket -->|Broadcasts| Config
-    Socket -->|Broadcasts| State
+    %% Read Flow
+    Config -.->|Reads| Renderer
+    State -.->|Reads| Renderer
     
-    %% Styling
-    style App fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000
-    style Config fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
-    style State fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
-    style Scoring fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
-    style Renderer fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
-    style Admin fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000
-    style Socket fill:#fff8e1,stroke:#fbc02d,stroke-width:2px,color:#000
+    Config -.->|Reads| Socket
+    State -.->|Reads| Socket
+
+    %% Triggers
+    Admin -.-|Triggers| Renderer
 ```
 
 ## Author
