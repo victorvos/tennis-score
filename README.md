@@ -1,24 +1,66 @@
-# tennis_score
-A tennis score keeper which features Broadcasting and Spectating
+# UDP Tennis Scoreboard
 
-Static webpage without broadcasting/spectating: [Webpage index](https://themetalfleece.github.io/tennis-score/)
+A broadcast-ready tennis scoreboard application using **Node.js**, **Express**, and **Socket.io**.  
+Refactored to be modular, testable, and SOLID-compliant.
 
-## Enable Broadcasting/Spectating with Websockets
+## Description
 
-1. Install **node**
-2. On the root project folder, run `npm install` (or `yarn`) in order to install the necessary modules
-3. Run `npm run start` (or `yarn start`) to start the websocket server
-4. Navigate to your IP address with the given port.
+This app allows you to display a real-time tennis scoreboard. One client acts as the host (controller) to update scores, while other clients (overlays, spectators) receive updates in real-time. It supports custom player names, set configuration (1, 3, or 5 sets), and full match logic including tie-breakers.
 
-### Broadcasting/Spectating instructions
+## Features
 
-#### Broadcasting
-1. Whenever you want to broadcast your game, press the "Broadcast" button.
-2. You will be given a Match #. This number is unique for your match and spectators can use it to spectate your game.
+- **Real-time updates**: Instant score reflection across all connected clients.
+- **Configurable**: Change player names, number of sets, and game rules.
+- **Robust Logic**: Handles deuce, advantage, tie-breakers, and set transitions automatically.
+- **Admin Panel**: Full control to override scores, names, or reset the match.
+- **Modular Architecture**: Clean separation of concerns (Config, State, Scoring, Renderer).
 
-#### Spectating
-1. Whenever you want to spectate a game, press the "Spectate" button.
-2. You will be prompted to give a Match #. Enter the number which corresponds to the match you want to spectate.
-3. A message will appear to inform you that you are spectating a match. Whenever its status changes, it will also change on your browser.
+## Installation
 
-You can join an existing game by loading the page with `?room=X`, where `X` is the room number.
+1. Clone the repository.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+## Usage
+
+### Start the Server
+```bash
+npm start
+```
+The server will start on port `8080`.
+
+### Host a Match
+1. Open `http://localhost:8080`.
+2. Click **Broadcast**.
+3. Use the interface to score points for Player 1 or Player 2.
+4. Use the **Configure** button to change names or correct scores.
+
+### Spectate/Overlay
+1. Open `http://localhost:8080`.
+2. Click **Spectate**.
+3. Enter the Match ID of the host (shown on the Host's screen).
+
+## Testing
+
+The project uses **Jest** for unit testing.
+
+```bash
+npm test
+```
+
+## Project Structure
+
+- `js/app.js`: Main entry point, wires up dependencies.
+- `js/config.js`: Manages game configuration.
+- `js/state.js`: Manages mutable game state (points, sets).
+- `js/scoring.js`: Scoring rules engine.
+- `js/renderer.js`: Handles UI updates.
+- `js/socket-manager.js`: WebSocket communication.
+- `js/admin.js`: Admin panel logic.
+- `tests/`: Unit tests for all modules.
+
+## Author
+
+themetalfleece
