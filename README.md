@@ -61,6 +61,44 @@ npm test
 - `js/admin.js`: Admin panel logic.
 - `tests/`: Unit tests for all modules.
 
+### Architecture
+
+```mermaid
+graph TD
+    %% Main Entry Point
+    App[TennisScoreApp] -->|Orchestrates| Config[MatchConfig]
+    App -->|Orchestrates| State[MatchState]
+    
+    %% Dependencies
+    App -->|Injects Data| Scoring[ScoringEngine]
+    App -->|Injects Data| Renderer[UIRenderer]
+    App -->|Injects Logic| Admin[AdminController]
+    App -->|Callbacks| Socket[SocketManager]
+
+    %% Interactions
+    Scoring -->|Reads| Config
+    Scoring -->|Updates| State
+
+    Renderer -->|Reads| Config
+    Renderer -->|Reads| State
+
+    Admin -->|Updates| Config
+    Admin -->|Updates| State
+    Admin -->|Triggers| Renderer
+
+    Socket -->|Broadcasts| Config
+    Socket -->|Broadcasts| State
+    
+    %% Styling
+    style App fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000
+    style Config fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
+    style State fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
+    style Scoring fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
+    style Renderer fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
+    style Admin fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000
+    style Socket fill:#fff8e1,stroke:#fbc02d,stroke-width:2px,color:#000
+```
+
 ## Author
 
 themetalfleece
