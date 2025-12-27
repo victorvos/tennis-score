@@ -66,11 +66,11 @@ npm test
 ```mermaid
 graph LR
     %% Styling Classes
-    classDef main fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef control fill:#fce4ec,stroke:#c2185b,stroke-width:2px
-    classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
-    classDef data fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    classDef view fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef main fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:black
+    classDef control fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:black
+    classDef logic fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:black
+    classDef data fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:black
+    classDef view fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:black
 
     %% 1. Initialization (Top)
     App[TennisScoreApp]:::main
